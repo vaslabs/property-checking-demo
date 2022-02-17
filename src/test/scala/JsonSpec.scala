@@ -8,6 +8,13 @@ import org.scalacheck.ScalacheckShapeless._
 
 object JsonSpec extends Properties("Json") {
 
+  property("object inverse") = forAll { (a: A) =>
+    a.asJson.as[A] == Right(a)
+  }
+
+  property("allow extensions") = forAll { (a: A, json: Json) =>
+    json.deepMerge(a.asJson).as[A] == Right(a)
+  }
 
 
   implicit def arbitraryJson: Arbitrary[Json] = Arbitrary(genJsonObject)
